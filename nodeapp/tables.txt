@@ -1,0 +1,60 @@
+create table accept_food_takeup(accept_id int primary key auto_increment,req_id int,foreign key(req_id) references food_takeup_request(req_id),
+d_username varchar(30),foreign key(d_username) references donor(d_username),d_phone varchar(10) not null check(length(d_phone)=10),d_email varchar(30),
+d_verified varchar(20),qty_accepted int,food_takeup_addr varchar(80),
+r_username varchar(30),foreign key(r_username) references receiver(r_username),r_phone varchar(10) not null check(length(r_phone)=10),r_email varchar(30), 
+r_verified varchar(20));
+
+
+
+create table food_takeup_request(req_id integer primary key not null auto_increment,d_username varchar(10),foreign key(d_username) references donor(d_username),d_phone varchar(10) not null check(length(d_phone)=10),d_email varchar(30),d_verified varchar(20),no_of_people_served integer not null,items varchar(50) not null,food_takeup_addr varchar(80) not null,latitude varchar(20),longitude varchar(20),f_validity integer not null,r_time datetime);
+
+
+alter table receiver add column r_lat varchar(20);
+alter table receiver add column r_long varchar(20);
+
+
+use foodwaste;
+show tables;
+select * from donor;
+select * from receiver;
+desc accept_food_takeup;
+desc food_takeup_request;
+update food_takeup_request set d_email="kptsiva@gmail.com" where d_username="yazz15";
+select * from accept_food_takeup;
+select * from food_takeup_request;
+select * from admin;
+update food_takeup_request set r_time=now() where d_username='yazz15';
+update food_takeup_request set r_time=now() where d_username='aksh';
+update food_takeup_request set r_time=now() where d_username='abi';
+update food_takeup_request set r_time=now() where d_username='hari';
+update food_takeup_request set r_time=now() where d_username='sam';
+update food_takeup_request set r_time=now() where d_username='saran';
+update food_takeup_request set d_email='19z343@pshtech.ac.in' where d_username='sam';
+update food_takeup_request set d_email='19z345@pshtech.ac.in' where d_username='saran';
+create table accept_food_takeup(accept_id int primary key auto_increment,req_id int,foreign key(req_id) references food_takeup_request(req_id),
+d_username varchar(30),foreign key(d_username) references donor(d_username),d_phone varchar(10) not null check(length(d_phone)=10),d_email varchar(30),
+d_verified varchar(20),qty_accepted int,food_takeup_addr varchar(80),
+r_username varchar(30),foreign key(r_username) references receiver(r_username),r_phone varchar(10) not null check(length(r_phone)=10),r_email varchar(30), 
+r_verified varchar(20),a_time datetime);
+drop table accept_food_takeup;
+create table food_takeup_request(req_id integer primary key not null auto_increment,d_username varchar(10),foreign key(d_username) references donor(d_username),d_phone varchar(10) not null check(length(d_phone)=10),d_email varchar(30),d_verified varchar(20),no_of_people_served integer not null,items varchar(50) not null,food_takeup_addr varchar(80) not null,latitude varchar(20),longitude varchar(20),f_validity integer not null,r_time datetime);
+drop table food_takeup_request;
+alter table receiver add column r_lat varchar(20);
+alter table receiver add column r_long varchar(20);
+desc receiver;
+ALTER TABLE accept_food_takeup
+DROP FOREIGN KEY accept_food_takeup_ibfk_1;
+select * from receiver;
+select * from food_takeup_request where HOUR(timediff(now(),r_time))<f_validity;
+ALTER TABLE donor ADD COLUMN ver_status varchar(20) ;
+ALTER TABLE receiver ADD COLUMN ver_status varchar(20);
+Alter table donor alter ver_status set default 'not verified';
+Alter table receiver alter ver_status set default 'not verified';
+create table donor_verification(req_id integer primary key not null auto_increment,d_type varchar(30) not null,d_username varchar(10) not null,foreign key(d_username) references donor(d_username),status varchar(10) not null default 'pending',file1 varchar(30) not null,file2 varchar(30) not null);
+select * from donor_verification;
+INSERT INTO donor_verification(d_username,d_type,file1,file2) values("sam","restraunt","aadhar_1","supdoc_1");
+INSERT INTO donor_verification(d_username,d_type,file1,file2) values("hari","social activist","aadhar_2","supdoc_2");
+create table receiver_verification(req_id integer primary key not null auto_increment,r_type varchar(30) not null,r_username varchar(10) not null,foreign key(r_username) references receiver(r_username),status varchar(10) not null default 'pending',file1 varchar(30) not null,file2 varchar(30) not null);
+select * from receiver_verification;
+INSERT INTO receiver_verification(r_username,d_type,file1,file2) values("sam","restraunt","aadhar_1","supdoc_1");
+INSERT INTO donor_verification(d_username,d_type,file1,file2) values("hari","social activist","aadhar_2","supdoc_2");

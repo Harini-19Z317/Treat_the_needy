@@ -1,0 +1,161 @@
+Derivation is a sequence of production rules. It is used to get the input string through these production rules. During parsing, we have to take two decisions. These are as follows:
+
+We have to decide the non-terminal which is to be replaced.
+We have to decide the production rule by which the non-terminal will be replaced.
+
+Derivation tree is a graphical representation for the derivation of the given production rules of the context free grammar (CFG).
+The deepest subtree is traversed first. So, the operator in the parent node has less precedence over the operator in the subtree.
+The properties of the derivation tree are given below −
+
+The root node is always a node indicating the start symbols.
+The derivation is read from left to right.
+The leaf node is always the terminal node.
+The interior nodes are always the non-terminal nodes.
+the input is scanned and then replaced with the production rule from left side to right. So, we have to read that input string from left to right.
+
+S → A1B  
+A → 0A | ε  
+B → 0B | 1B | ε  
+The input is scanned and replaced with the production rule from right to left. So in rightmost derivation, we read the input string from right to left.
+In a mixed derivation the string is obtained by applying production to the leftmost variable and rightmost variable simultaneously as per the requirement in each successive step.
+
+
+
+app.post("/acceptrequest/acceptqty", function(req, res)
+{	
+	var req_id=req.body.id;
+	var qty=req.body.qty;
+	var r_username=req.body.r_name;
+	console.log(r_username);
+	var sql='SELECT * FROM food_takeup_request where req_id=' + req_id + '';
+    con.query(sql, function (err, data, fields) {
+    if (err) throw err;
+    //create table Accept_food_takeup(accept_id integer primary key not null auto_increment,req_id integer not null,d_username varchar(10),foreign key(d_username) references donor(d_username),d_phone varchar(10) unique not null check(LENGTH(d_phone) = 10),d_email varchar(30),d_verified varchar(10),qty_accepted integer not null,food_takeup_addr varchar(80) not null,r_username varchar(10),foreign key(r_username) references receiver(r_username),r_phone varchar(10) unique not null check(LENGTH(r_phone) = 10),r_email varchar(30),r_verified varchar(10) );
+
+    var d_username=data[0].d_username;
+    var address=data[0].food_takeup_addr;
+    var d_phone=data[0].d_phone;
+    var d_email=data[0].d_email;
+    console.log(d_username);
+    var no_of_people_served=data[0].no_of_people_served;
+    var sql="SELECT ver_status FROM donor where d_username='" + d_username + "'";
+    con.query(sql, function (err, data, fields) {
+    if (err) throw err;
+    var dver_status=data[0].ver_status;
+    var sql="SELECT r_phone,r_email,ver_status FROM receiver WHERE r_username='" + r_username + "'";
+    con.query(sql, function (err, data) {
+    if (err) throw err;
+    var r_phone=data[0].r_phone;
+    var r_email=data[0].r_email;
+    var rver_status=data[0].ver_status;
+    var sql = "INSERT INTO Accept_food_takeup(req_id,d_username ,d_phone,d_email,d_verified,qty_accepted,food_takeup_addr,r_username ,r_phone,r_email,r_verified,a_time) VALUES (" + req_id + ",'" + d_username + "','" + d_phone + "','" + d_email + "','" + dver_status + "','" + qty + "','" + address + "','" + un + "','" + r_phone + "','" + r_email + "','" + rver_status + "',now())";
+
+    con.query(sql, function (err, data) {
+    if (err) throw err;
+    var mailOptions = {
+  		from: 'harinisk01@gmail.com',
+  		to: d_email,
+  		subject: 'Regarding the acceptance of your food takeup request',
+  		text: 'That was easy!'
+	};
+	console.log(mailOptions.to);
+
+    	transporter.sendMail(mailOptions, function(error, info){
+  		if (error) {
+    	console.log(error);
+  		} 	else {
+    	console.log('Email sent: ' + info.response);
+  	}
+});
+    if(no_of_people_served>qty)
+    {
+    	var sql = "UPDATE food_takeup_request SET no_of_people_served=" + (no_of_people_served-qty) + " WHERE req_id=" + req_id + "";
+
+    	con.query(sql, function (err, data) {
+    	if (err) throw err;
+    	res.redirect("/receiverdash");
+		});
+    }
+    else if(no_of_people_served==qty)
+    {
+    	var sql = "DELETE from food_takeup_request WHERE req_id=" + req_id + "";
+
+    	con.query(sql, function (err, data) {
+    	if (err) throw err;
+    	res.redirect("/receiverdash");
+		});
+    }
+});
+});
+});
+});
+});
+
+
+Removing Ambiguity
+Method 1: Specify precedence.
+You can build precedence into the grammar by having a different non-terminal for
+each precedence level:
+• Lowest level — highest in the tree (lowest precedence)
+• Highest level — lowest in the tree
+• Same level — same precedence
+For the previous example,
+E → E * E | E + E | ( E ) | id
+rewrite it to:
+E → E + T | T
+T → T * F | F
+F → id | ( E )
+An ambiguous grammar may be converted into an unambiguous grammar by implementing-
+
+Precedence Constraints
+Associativity Constraints
+
+
+The precedence constraint is implemented using the following rules-
+
+The level at which the production is present defines the priority of the operator contained in it.
+The higher the level of the production, the lower the priority of operator.
+The lower the level of the production, the higher the priority of operator.
+
+The associativity constraint is implemented using the following rules-
+
+If the operator is left associative, induce left recursion in its production.
+If the operator is right associative, induce right recursion in its production.
+
+11.0365596	76.9692573
+
+
+
+
+
+
+1.West TV Swamy Road,R.S.Puram,Coimbatore
+2.Kamaraj road,Circuit House,Race Course,Coimbatore
+3.DB road,RS Puram,Coimbatore
+4.Cross cut road,Gandhipuram,Coimbatore
+5.Karuppa Goundar Street,Town Hall,Coimbatore.
+6.B.K.R Nagar,Siddhapudhur,Coimbatore.
+7.Sivananda Colony,Tatabad,Coimbatore.
+8.Ramakrishnapuram,Saravanapatti,Coimbatore.
+9.TNP Nagar,Thudiyalur,Coimbatore.
+10.V.N.R.Nagar,Vadavalli,coimbatore.
+11.NSR Road,Saibaba colony,coimbatore.
+12.KNG Pudhur pirivu,Edayarpalayam,coimbatore.
+
+
+
+1.R.S.Puram,Coimbatore
+2.Race Course,Coimbatore
+3.RS Puram,Coimbatore
+4.Gandhipuram,Coimbatore
+5.Town Hall,Coimbatore.
+6.Siddhapudhur,Coimbatore.
+7.Sivananda Colony,Coimbatore.
+8.Saravanapatti,Coimbatore.
+9.Thudiyalur,Coimbatore.
+10.Nagar,Vadavalli,coimbatore.
+11.Saibaba colony,coimbatore.
+12.Edayarpalayam,coimbatore.
+
+
+Found difficult to integrate the open cage api for finding the distance between two places

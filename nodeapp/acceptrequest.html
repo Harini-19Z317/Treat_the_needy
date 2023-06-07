@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Fetch using MySQL and Node.js</title>
+</head>
+<body>
+    <div class="table-data">
+<h2>Display Data using Node.js & MySQL</h2>
+<section id="table">
+        <div class="table">
+
+            <div id="headers">
+                <tr>
+            <th>Req_ID</th>
+            <th>Donor_name</th>
+            <th>Food Availabilty</th>
+            <th>Items</th>
+            <th>Foodtakeup addr</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+                <!-- <span id="req_id">req_id             </span>
+                <span id="donorname">donorname             </span>
+                <span id="food avail">donor phone           </span>
+                <span id="items">donor email             </span>
+                <span id="food avail">food avail           </span>
+                <span id="items">items             </span>
+                <span id="foodtakeup_address">Address    </span> -->
+            </div>
+            <%
+            if(userData.length!=0){
+            var i=1;
+            userData.forEach(function(data){
+            %>
+            <form class="tr" action="acceptqty" method='post'>
+                        <input type="text" id="id" name="id" class="td" readonly value= <%= data.req_id %>>
+                        <input type="text" name="fullname" class="td" readonly value= <%= data.d_username %>>
+                        <input type="text" name="d_phone" class="td" readonly value= <%= data.d_phone %>>
+                        <input type="text" name="d_email" class="td" readonly value= <%= data.d_email %>>
+                        <input type="text" name="phone" class="td" readonly value= <%= data.no_of_people_served %>>
+                        <input type="text" name="mobile" class="td" readonly value= <%= data.items %>>
+                        <input type="text" name="address" class="td" readonly value= <%= data.food_takeup_addr %>>
+                        <input type="text" name="qty" class="td" value= ''>
+                        <input type="submit" name="accept" id="accept" value="accept" class="td">
+                        <input type="hidden" name="reqhidden" id="reqhidden" class="td" value=<%= data.req_id %> >
+                    </form>
+        <%  i++; }) %>
+    <% } %>
+        </div>
+    </section>
+    <!-- <table border="1">
+        <tr>
+            <th>Req_ID</th>
+            <th>Donor_name</th>
+            <th>Food Availabilty</th>
+            <th>Items</th>
+            <th>Foodtakeup addr</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        
+        <%
+        if(userData.length!=0){
+        var i=1;
+        userData.forEach(function(data){
+        %>
+        <tr>
+            <td><%=data.req_id; %></td>
+            <td><%=data.d_username %></td>
+            <td><%=data.no_of_people_served %></td>
+            <td><%=data.items %></td>
+            <td><%=data.food_takeup_addr %></td>
+            <td><a href="/edit/<%=data.req_id%>">Edit</a></td>
+            <td><a href="/users/delete/<%=data.id%>">Delete</a></td>
+        </tr>
+        <%  i++; }) %>
+        <% } else{ %>
+            <tr>
+                <td colspan="7">No Data Found</td>
+            </tr>
+        <% } %>
+    </table> -->
+    </div>
+</body>
+</html>
